@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修系统</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../layui/layui.all.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../js/style.js"></script>
+    <script src="../layui/layui.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.mobile.css">
+</head>
+<body>
+<div class="fd-banner">
+    <div class="fd-head-logo"></div>
+    <div class="fd-head-text">
+        后勤管理平台
+    </div>
+    <div class="fd-sign">
+        欢迎登陆
+    </div>
+</div>
+
+<div class="fd-banner-2"></div>
+<div class="fd-main-body">
+    <div class="fd-menu-left">
+        <div class="fd-menu-main-nav" id="fd-menu-list">
+            <div class="js-fd-menu-nav">
+                <img src="../images/nav-checked.jpg" alt="">
+                <div class="js-fd-menu-nav-text">设备报修</div>
+
+            </div>
+            <div class="js-fd-menu-nav-list">
+                <div class="js-fd-menu-nav-list-1" style="background-color: #949596;color: white">
+                    <div class="fd-menu-nav-img"></div>
+                    <div class="fd-menu-nav-text1">在线报修</div>
+                </div>
+                <div class="js-fd-menu-nav-list-1">
+                    <div class="fd-menu-nav-img"></div>
+                    <div class="fd-menu-nav-text1">报修进度</div>
+                </div>
+                <div class="js-fd-menu-nav-list-1">
+                    <div class="fd-menu-nav-img"></div>
+                    <div class="fd-menu-nav-text1">报修记录</div>
+                </div>
+                <div class="js-fd-menu-nav-list-1">
+                    <div class="fd-menu-nav-img"></div>
+                    <div class="fd-menu-nav-text1">问题统计</div>
+                </div>
+            </div>
+            <!--<div class="js-fd-menu-nav-1">-->
+                <!--<img src="../images/nav-check.jpg" alt="">-->
+                <!--<div class="fd-menu-nav-text2">失物招领</div>-->
+
+            <!--</div>-->
+        </div>
+    </div>
+
+    <div class="fd-menu-right">
+        <div class="fd-menu-right-1">
+            <h3>报修信息填写</h3>
+            <form class="layui-form" action="" style="margin-top: 40px;margin-left: 25%;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系人</label>
+                    <div class="layui-input-block">
+                        <input style="width: 300px" name="username" class="layui-input" type="text" placeholder="请输入联系人" autocomplete="off" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-inline">
+                    <label class="layui-form-label">联系电话</label>
+                    <div class="layui-input-block">
+                        <input style="width: 300px" name="title" class="layui-input" type="text" placeholder="请输入联系电话" autocomplete="off" lay-verify="title">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                        <label class="layui-form-label">所在楼宇</label>
+                        <div class="layui-input-block" style="width: 300px">
+                          <select name="address" lay-verify="required">
+                            <option value=""></option>
+                            <option value="0">教六</option>
+                            <option value="1">教七</option>
+                            <option value="2">教八</option>
+                            <option value="3">教九</option>
+                            <option value="4">教十</option>
+                            <option value="5">教十一</option>
+                            <option value="6">教十二</option>
+                            <option value="7">其他</option>
+                          </select>
+                        </div>
+                      </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">具体地点</label>
+                        <div class="layui-input-block">
+                            <input style="width: 300px" name="address" class="layui-input" type="text" placeholder="请输入具体问题地点" autocomplete="off" lay-verify="title">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">报修描述</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea" name="info" placeholder="请输入报修具体详情" style="width: 300px;resize: none" ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-filter="demo1" lay-submit="" id="js-baoxiu-submit">立即提交</button>
+                        <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    </div>
+                </div>
+            </form>
+            <script>
+
+            </script>
+
+
+        </div>
+
+        <div class="fd-menu-right-2" >
+            <table class="layui-hide" id="test" style="text-align: center" lay-filter="tableFilter"></table>
+
+            <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+            </script>
+
+
+
+        </div>
+        <script>
+            layui.use(['form', 'layedit', 'laydate','table','layer'], function(){
+                var info;
+                var form = layui.form
+                    ,layer = layui.layer
+                    ,layedit = layui.layedit
+                    ,laydate = layui.laydate;
+
+                //日期
+                laydate.render({
+                    elem: '#test5'
+                    ,type: 'datetime'
+                });
+
+
+                //创建一个编辑器
+                var editIndex = layedit.build('LAY_demo_editor');
+
+                //自定义验证规则
+                form.verify({
+                    title: function(value){
+                        if(value.length < 7){
+                            return '标题至少得5个字符啊';
+                        }
+                    }
+                    ,content: function(value){
+                        layedit.sync(editIndex);
+                    }
+                });
+
+                //监听指定开关
+                form.on('switch(switchTest)', function(data){
+                    layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+                        offset: '6px'
+                    });
+                    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+                });
+
+                //监听提交
+                form.on('submit(demo1)', function(data){
+                    info=JSON.stringify(data.field);
+                    layer.alert(JSON.stringify(data.field), {
+                        title: '最终的提交信息'
+                    });
+                    // $.ajax(
+                    //
+                    //     {
+                    //         type: "POST",
+                    //         url: "202.206.221.94:8080/login/",
+                    //         dataType: "json",
+                    //         data: JSON.stringify(data.field),
+                    //
+                    //         success: function () {
+                    //             alert('fas');
+                    //         }
+                    //     });
+                    return false;
+                });
+                form.on('submit(demo-2)', function(data){
+                    info=JSON.stringify(data.field);
+                    layer.alert(JSON.stringify(data.field), {
+                        title: '最终的提交信息'
+                    });
+                    // $.ajax(
+                    //
+                    //     {
+                    //         type: "POST",
+                    //         url: "202.206.221.94:8080/login/",
+                    //         dataType: "json",
+                    //         data: JSON.stringify(data.field),
+                    //
+                    //         success: function () {
+                    //             alert('fas');
+                    //         }
+                    //     });
+                    return false;
+                });
+                form.on('submit(edit-1)', function(data){
+                    info=JSON.stringify(data.field);
+                    layer.alert(JSON.stringify(data.field), {
+                        title: '最终的提交信息'
+                    });
+                    // $.ajax(
+                    //
+                    //     {
+                    //         type: "POST",
+                    //         url: "202.206.221.94:8080/login/",
+                    //         dataType: "json",
+                    //         data: JSON.stringify(data.field),
+                    //
+                    //         success: function () {
+                    //             alert('fas');
+                    //         }
+                    //     });
+                    return false;
+                });
+
+                var table = layui.table;
+                var layer = layui.layer;
+                //监听工具条
+                table.on('tool(tableFilter)', function(obj){
+                    var data = obj.data;
+                    if(obj.event === 'detail'){
+                        lookUp(data);
+                    } else if(obj.event === 'del'){
+                        layer.confirm('真的删除行么', function(index){
+                            obj.del();
+                            layer.close(index);
+                        });
+                    } else if(obj.event === 'edit'){
+                        // layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                        edit(data);
+                    }
+                });
+                table.on('tool(tableFilter-1)', function(obj){
+                    var data = obj.data;
+                    if(obj.event === 'detail-1'){
+                        lookUp(data);
+                    } else if(obj.event === 'del'){
+                        layer.confirm('真的删除行么', function(index){
+                            obj.del();
+                            layer.close(index);
+                        });
+                    } else if(obj.event === 'edit'){
+                        layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                        edit(data);
+                    }
+                });
+                function lookUp(data) {
+                    console.log(data);
+                    $('#fd-specific-info-id').html(data.id);
+                    $('#fd-specific-info-name').html(data.name);
+                    $('#fd-specific-info-tel').html(data.tel);
+                    $('#fd-specific-info-address').html(data.address);
+                    $('#fd-specific-info-time').html(data.time);
+                    $('#fd-specific-info-detail').html(data.detail);
+                    $('#fd-specific-info-status').html(data.status);
+                    layer.open({
+                        type:1,
+                        title:false,
+                        content:$("#look_up"),
+                        closeBtn:"2",
+                        area: ['500px', '400px']
+                    })
+                }
+                function edit(data) {
+                    $('#fd-edit-info-id').html(data.id);
+                    $('#fd-edit-info-name').html(data.name);
+                    $('#fd-edit-info-tel').html(data.tel);
+                    $('#fd-edit-info-address').html(data.address);
+                    $('#fd-edit-info-time').html(data.time);
+                    $('#fd-edit-info-detail').html(data.detail);
+                    $('#fd-edit-info-status').html(data.status);
+                    layer.open({
+                        type:1,
+                        title:false,
+                        content:$("#edit"),
+                        closeBtn:"2",
+                        area: ['500px', '450px']
+                    })
+                }
+                function delete_info() {
+                    // $.ajax(
+                    //
+                    //     {
+                    //         type: "POST",
+                    //         url: "202.206.221.94:8080/login/",
+                    //         dataType: "json",
+                    //         data: JSON.stringify(data.field),
+                    //
+                    //         success: function () {
+                    //             alert('fas');
+                    //         }
+                    //     });
+                }
+                var $ = layui.$, active = {
+                    getCheckData: function(){ //获取选中数据
+                        var checkStatus = table.checkStatus('idTest')
+                            ,data = checkStatus.data;
+                        layer.alert(JSON.stringify(data));
+                    }
+                    ,getCheckLength: function(){ //获取选中数目
+                        var checkStatus = table.checkStatus('idTest')
+                            ,data = checkStatus.data;
+                        layer.msg('选中了：'+ data.length + ' 个');
+                    }
+                    ,isAll: function(){ //验证是否全选
+                        var checkStatus = table.checkStatus('idTest');
+                        layer.msg(checkStatus.isAll ? '全选': '未全选')
+                    }
+                };
+
+                $('.demoTable .layui-btn').on('click', function(){
+                    var type = $(this).data('type');
+                    active[type] ? active[type].call(this) : '';
+                });
+                table.render({
+                    elem: '#test'
+                    ,url:'../json/package.json'
+                    ,cols: [[
+                        {field:'id', width:80, title: 'ID', sort: true}
+                        ,{field:'name', width:120, title: '报修人'}
+                        ,{field:'tel', width:150, title: '联系电话'}
+                        ,{field:'address', width:120, title: '地点'}
+                        ,{field:'time', title: '报修时间', minWidth: 50, sort: true}
+                        ,{field:'detail', width:200, title: '详情'}
+                        ,{field:'status', width:80, title: '状态'}
+                        ,{field:'operate', width:180, title: '操作',toolbar: '#barDemo'}
+                    ]]
+                    ,page: true
+                });
+                table.render({
+                    elem: '#test-1'
+                    ,url:'../json/package.json'
+                    ,cols: [[
+                        {field:'id', width:80, title: 'ID', sort: true}
+                        ,{field:'name', width:120, title: '报修人'}
+                        ,{field:'tel', width:150, title: '联系电话'}
+                        ,{field:'address', width:120, title: '地点'}
+                        ,{field:'time', title: '报修时间', minWidth: 50, sort: true}
+                        ,{field:'detail', width:200, title: '详情'}
+                        ,{field:'status', width:80, title: '状态'}
+                        ,{field:'operate', width:80, title: '操作',toolbar: '#barDemo-1'}
+                    ]]
+                    ,page: true
+                });
+            });
+        </script>
+        <div class="fd-menu-right-3" >
+            <form class="layui-form" action="" method="post"  >
+                <div class="fd-search">
+                    <input type="text" name="search-text" required  lay-verify="required" placeholder="请输入查询地点" autocomplete="off" class="layui-input" style="width: 300px;float: left">
+                    <button class="layui-btn" lay-filter="demo-2" lay-submit="" id="js-search-submit">立即查询</button>
+                </div>
+            </form>
+            <table class="layui-hide" id="test-1" style="text-align: center" lay-filter="tableFilter-1"></table>
+
+            <script type="text/html" id="barDemo-1">
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail-1" style="margin-left: 20%">查看</a>
+
+            </script>
+
+
+
+        </div>
+
+
+    </div>
+</div>
+<div id="look_up" style="display: none;margin-bottom: 50px">
+    <div id="d_id" >
+
+    </div>
+    <h3 style="text-align: center;margin-top: 20px;font-weight: bold">具体报修内容</h3>
+    <div class="fd-specific-info">
+        <div class="fd-specific-info-title">ID</div>
+        <div class="fd-specific-info-value" id="fd-specific-info-id"></div>
+    </div>
+    <div class="fd-specific-info">
+        <div class="fd-specific-info-title">报修人</div>
+        <div class="fd-specific-info-value" id="fd-specific-info-name"></div>
+    </div>
+    <div class="fd-specific-info">
+        <div class="fd-specific-info-title">联系电话</div>
+        <div class="fd-specific-info-value" id="fd-specific-info-tel"></div>
+    </div>
+    <div class="fd-specific-info">
+        <div class="fd-specific-info-title">地点</div>
+        <div class="fd-specific-info-value" id="fd-specific-info-address"></div>
+    </div>
+    <div class="fd-specific-info">
+        <div class="fd-specific-info-title">报修时间</div>
+        <div class="fd-specific-info-value" id="fd-specific-info-time"></div>
+    </div>
+    <div class="fd-specific-info-01">
+        <div class="fd-specific-info-title-01" style="height: auto;">详情</div>
+        <div class="fd-specific-info-value-01" id="fd-specific-info-detail" ></div>
+    </div>
+    <div class="fd-specific-info">
+        <div class="fd-specific-info-title">状态</div>
+        <div class="fd-specific-info-value" id="fd-specific-info-status"></div>
+    </div>
+</div>
+<div id="edit" style="display: none">
+    <form class="layui-form" action="" method="post"  >
+    <h3 style="text-align: center;margin-top: 20px;font-weight: bold">修改报修进度</h3>
+    <div class="fd-edit-info">
+        <div class="fd-edit-info-title">ID:</div>
+        <div class="fd-edit-info-value" id="fd-edit-info-id"></div>
+        <div class="fd-edit-info-title">报修人:</div>
+        <div class="fd-edit-info-value" id="fd-edit-info-name"></div>
+    </div>
+    <div class="fd-edit-info">
+        <div class="fd-edit-info-title">联系电话:</div>
+        <div class="fd-edit-info-value" id="fd-edit-info-tel" style="width: 100px;height: 16px;margin-left: 10px;">
+        <div class="fd-edit-info-title">地点:</div>
+        <div class="fd-edit-info-value" id="fd-edit-info-address"></div>
+    </div>
+    <div class="fd-edit-info">
+        <div class="fd-edit-info-title">报修时间:</div>
+        <div class="fd-edit-info-value" id="fd-edit-info-time"></div>
+    </div>
+    <div class="fd-edit-info-01" style="margin-left: 0">
+        <div class="fd-edit-info-title-01" style="height: auto">详情:</div>
+        <div class="fd-edit-info-value-01" id="fd-edit-info-detail" style="height: auto;"></div>
+    </div>
+    <div class="fd-edit-info" style="margin-left: -30px;border: none;margin-top: 20px;">
+        <div class="layui-form-item">
+                <label class="layui-form-label fd-edit-info-title">状态：</label>
+                <div class="layui-input-block fd-edit-info-value" id="fd-edit-info-status" style="margin-left: 0;width: 150px">
+                  <select name="status" lay-verify="required">
+                    <option value=""></option>
+                    <option value="0">等待维修</option>
+                    <option value="1">维修中</option>
+                    <option value="2">维修完成</option>
+
+                  </select>
+                </div>
+              </div>
+
+    </div>
+        <button class="layui-btn" lay-submit lay-filter="edit-1" style="margin-left: -20px;height: 30px;line-height: 30px;margin-top: 40px;">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px;height: 30px;line-height: 30px;margin-top: 40px;">重置</button>
+    </form>
+</div>
+</body>
+
+</html>

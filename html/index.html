@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修系统</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../layui/layui.all.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../js/style.js"></script>
+    <script src="../layui/layui.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.mobile.css">
+</head>
+<body>
+
+<script type="text/javascript">
+    layui.use('layer',function () {
+        var layer = layui.layer;
+        console.log( document.getElementById("test"));
+       // layer.msg("2223222");
+        layer.open({
+            type:1,
+            title:false,
+            content:$("#test"),
+            closeBtn:"2",
+            area: ['400px', '315px']
+        });
+        function test() {
+
+        }
+    });
+</script>
+
+</body>
+
+<div id="test" style="display: none">
+    <h5>李达牛逼</h5>
+</div>
+</html>
